@@ -159,12 +159,27 @@ export async function selectSummerRows<T>(table: string, query?: Record<string, 
 }
 
 export async function insertSummerRows<T>(table: string, rows: Record<string, unknown>[], keyKind: KeyKind = "service") {
+  // PostgREST bulk insert requires every object to carry the same keys
+  // ("All object keys must match", PGRST102). Normalize to the union of keys
+  // across all rows, filling any gaps with null so partial seed rows don't 400.
+  const normalized = normalizeRowKeys(rows);
   return summerRestRequest<T[]>({
     table,
     method: "POST",
-    body: rows,
+    body: normalized,
     keyKind,
     prefer: ["return=representation"],
+  });
+}
+
+function normalizeRowKeys(rows: Record<string, unknown>[]): Record<string, unknown>[] {
+  if (rows.length <= 1) return rows;
+  const allKeys = new Set<string>();
+  for (const r of rows) for (const k of Object.keys(r)) allKeys.add(k);
+  return rows.map((r) => {
+    const out: Record<string, unknown> = {};
+    for (const k of allKeys) out[k] = k in r ? r[k] : null;
+    return out;
   });
 }
 
