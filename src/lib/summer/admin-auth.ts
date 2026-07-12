@@ -9,10 +9,31 @@ import {
   fetchSupabaseAuth,
   getSummerSupabaseConfig,
   hasSummerSupabaseAdminConfig,
+  IS_DEMO,
   selectSummerSingle,
   upsertSummerRows,
 } from "@/lib/summer/supabase";
 import type { SummerAdminUser } from "@/lib/summer/types";
+
+// In demo mode there are no real credentials — every admin request resolves to a
+// single synthetic admin identity so visitors can explore the full back office.
+const DEMO_ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL || "demo@summerloffler.com";
+
+function demoAdminSession(): SummerAdminSession {
+  const adminUser: SummerAdminUser = {
+    id: "00000000-0000-0000-0000-000000000000",
+    email: DEMO_ADMIN_EMAIL,
+    role: "admin",
+    created_at: new Date(0).toISOString(),
+  };
+
+  return {
+    accessToken: "demo",
+    refreshToken: "demo",
+    user: { id: adminUser.id, email: adminUser.email },
+    adminUser,
+  };
+}
 
 type PasswordAuthResponse = {
   access_token: string;
@@ -121,6 +142,10 @@ export async function clearSummerAdminSession() {
 }
 
 export async function getSummerAdminSession(): Promise<SummerAdminSession | null> {
+  if (IS_DEMO) {
+    return demoAdminSession();
+  }
+
   if (!hasSummerSupabaseAdminConfig()) {
     return null;
   }

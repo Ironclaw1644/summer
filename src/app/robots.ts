@@ -14,6 +14,11 @@ function siteBase() {
 }
 
 export default function robots(): MetadataRoute.Robots {
+  // Demo builds are noindex end-to-end — disallow everything.
+  if (process.env.DEMO_MODE === "1") {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
+
   return {
     rules: [
       {

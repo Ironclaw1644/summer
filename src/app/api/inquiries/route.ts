@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { sendSummerEmail } from "@/lib/summer/email";
 import { hasSummerSupabaseAdminConfig, insertSummerRows } from "@/lib/summer/supabase";
 
 export const runtime = "nodejs";
@@ -61,6 +62,17 @@ export async function POST(request: NextRequest) {
         utm_campaign: payload.utmCampaign?.trim() || null,
       },
     ]);
+
+    // Notify the studio of the new inquiry. Stubbed/suppressed in demo mode and
+    // a no-op until an email provider is configured — never blocks the response.
+    await sendSummerEmail({
+      to: process.env.SUMMER_STUDIO_EMAIL || "hello@summerloffler.com",
+      replyTo: email,
+      subject: `New ${inquiryType} inquiry from ${fullName || email}`,
+      text: `${fullName || "Someone"} (${email}) submitted a ${inquiryType} inquiry:\n\n${message}`,
+    }).catch(() => {
+      /* email is best-effort; the inquiry is already persisted */
+    });
 
     return NextResponse.json({ ok: true, inquiryId: rows?.[0]?.id || null });
   } catch (error) {

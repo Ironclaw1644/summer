@@ -2,6 +2,17 @@ import "server-only";
 
 import { SUMMER_SCHEMA } from "@/lib/summer/types";
 
+// ── Demo mode ───────────────────────────────────────────────────────────────
+// When DEMO_MODE=1 the app runs as a self-contained showroom demo: admin auth
+// is bypassed (synthetic admin), reads/writes target the isolated demo schema,
+// outbound email is stubbed, and the tour guide overlay mounts.
+export const IS_DEMO = process.env.DEMO_MODE === "1";
+
+// The Postgres schema every Supabase REST call targets. Centralized here so the
+// demo build can swap the entire data layer with a single env var. Falls back to
+// the real production schema ("summer").
+export const SCHEMA = process.env.SUPABASE_SCHEMA || SUMMER_SCHEMA;
+
 type KeyKind = "anon" | "service";
 
 type QueryValue = string | number | boolean | null | undefined;
@@ -93,7 +104,7 @@ export async function summerRestRequest<T>(options: {
   cache?: RequestCache;
 }) {
   const method = options.method || "GET";
-  const schema = options.schema || SUMMER_SCHEMA;
+  const schema = options.schema || SCHEMA;
   const keyKind = options.keyKind || "service";
   const key = getSupabaseKey(keyKind);
   const { url } = getSummerSupabaseConfig();

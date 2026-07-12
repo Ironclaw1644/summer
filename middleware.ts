@@ -6,8 +6,18 @@ import {
   SUMMER_CLIENT_ACCESS_COOKIE,
 } from "@/lib/summer/admin-constants";
 
+// Kept inline (not imported from the server-only supabase module) because
+// middleware runs on the edge runtime. DEMO_MODE is inlined at build time.
+const IS_DEMO = process.env.DEMO_MODE === "1";
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Demo builds bypass every auth gate — the whole point of the showroom is to
+  // let visitors walk straight into the admin without credentials.
+  if (IS_DEMO) {
+    return NextResponse.next();
+  }
 
   const isAdminPath = pathname.startsWith("/admin") && !pathname.startsWith("/admin/login");
   const isReviewPage = pathname === "/review" || pathname.startsWith("/review/");

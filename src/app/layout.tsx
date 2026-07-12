@@ -4,10 +4,12 @@ import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { config as faConfig } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
+import { DemoTourguide } from "@/components/DemoTourguide";
 import { FooterMount } from "@/components/summer/FooterMount";
 import { Header as SiteHeader } from "@/components/summer/Header";
 import { PageShell } from "@/components/summer/PageShell";
 import { getSummerPublicSnapshot } from "@/lib/summer/site-content";
+import { IS_DEMO } from "@/lib/summer/supabase";
 
 import "./globals.css";
 
@@ -57,6 +59,8 @@ export const metadata: Metadata = {
   },
   description:
     "Private training, online coaching, and refined fitness work in Los Angeles — heavy lifting, glute-focused programming, and editorial direction by Summer Loffler.",
+  // Demo builds must never be indexed — keep the showroom out of search results.
+  robots: { index: !IS_DEMO, follow: !IS_DEMO },
   openGraph: {
     siteName: "Summer Loffler",
     type: "website",
@@ -92,6 +96,7 @@ export default async function RootLayout({
           instagramUrl={snapshot.instagramUrl}
           contactEmail={snapshot.contactEmail}
         />
+        {IS_DEMO ? <DemoTourguide /> : null}
       </body>
     </html>
   );
