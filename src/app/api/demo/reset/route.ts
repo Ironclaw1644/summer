@@ -77,6 +77,7 @@ async function runReset() {
       {
         email: "priya.nair@example.com",
         full_name: "Priya Nair",
+        phone: "+1 (213) 555-0168",
         instagram_handle: "@priya.strong",
         lifecycle_status: "lead",
         notes: "Downloaded the Glute Sculpt Guide. Warm — follow up about coaching.",
