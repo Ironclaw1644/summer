@@ -181,6 +181,7 @@ function buildCSS(t: { accent: string; onAccent: string; font: string }): string
   const onRev = contrastText(rev);
   return `
 .wp-tg-banner{position:fixed;top:0;left:0;right:0;z-index:99990;background:#141414f2;color:#fff;font-family:${t.font};font-size:13px;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 14px;border-bottom:2px solid ${t.accent};backdrop-filter:saturate(1.2) blur(2px)}
+.wp-tg-banner .wp-tg-credit{white-space:nowrap}@media (max-width:600px){.wp-tg-banner .wp-tg-nightly{display:none}}
 .wp-tg-banner .wp-tg-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:${t.accent};margin-right:7px;vertical-align:middle}
 .wp-tg-banner a{color:${t.accent};text-decoration:none;font-weight:600;border-bottom:1.5px solid ${t.accent}}
 .wp-tg-banner button{all:unset;cursor:pointer;color:#fff;border:1px solid #ffffff88;border-radius:999px;padding:3px 12px;font-family:${t.font};font-size:12px}
@@ -244,7 +245,7 @@ export function mountTourguide(cfg: TourguideConfig): void {
   const banner = document.createElement("div");
   banner.className = "wp-tg-banner";
   banner.innerHTML =
-    `<span><span class="wp-tg-dot"></span><a class="wp-tg-credit" href="https://luziq.ai/websites/" target="_blank" rel="nofollow noopener">Demo by <b style="letter-spacing:.12em">LUZIQ</b></a> · resets nightly</span>` +
+    `<span><span class="wp-tg-dot"></span><a class="wp-tg-credit" href="https://luziq.ai/websites/" target="_blank" rel="nofollow noopener">Demo by <b style="letter-spacing:.12em">LUZIQ</b></a><span class="wp-tg-nightly"> · resets nightly</span></span>` +
     (cfg.adminUrl ? `<a href="${cfg.adminUrl}">open the admin →</a>` : "") +
     `<a href="${inquireUrl}" target="_blank" rel="nofollow noopener">want one like this? →</a>` +
     `<button type="button" data-tg-restart>tour</button>`;
