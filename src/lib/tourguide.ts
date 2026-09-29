@@ -181,7 +181,7 @@ function buildCSS(t: { accent: string; onAccent: string; font: string }): string
   const onRev = contrastText(rev);
   return `
 .wp-tg-banner{position:fixed;top:0;left:0;right:0;z-index:99990;background:#141414f2;color:#fff;font-family:${t.font};font-size:13px;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 14px;border-bottom:2px solid ${t.accent};backdrop-filter:saturate(1.2) blur(2px)}
-.wp-tg-banner .wp-tg-credit{white-space:nowrap}@media (max-width:600px){.wp-tg-banner .wp-tg-nightly{display:none}}
+.wp-tg-banner a.wp-tg-credit{white-space:nowrap;color:#fff;border-bottom-color:#ffffff66}@media (max-width:600px){.wp-tg-banner .wp-tg-nightly{display:none}}
 .wp-tg-banner .wp-tg-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:${t.accent};margin-right:7px;vertical-align:middle}
 .wp-tg-banner a{color:${t.accent};text-decoration:none;font-weight:600;border-bottom:1.5px solid ${t.accent}}
 .wp-tg-banner button{all:unset;cursor:pointer;color:#fff;border:1px solid #ffffff88;border-radius:999px;padding:3px 12px;font-family:${t.font};font-size:12px}
