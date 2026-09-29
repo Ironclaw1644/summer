@@ -29,22 +29,15 @@ export type TourguideTheme = {
   font?: string;           // body font; inherits the host's if omitted
 };
 
-// Bottom-of-page animated discount reveal (slides up near the page bottom,
-// strikes through an anchor price, pops the "from" price, runs a founder-rate
-// countdown). Set `priceReveal: false` to turn it off for a demo.
-export type PriceReveal = {
-  from?: string;           // headline live price, e.g. "from $1,500"
-  anchor?: string;         // struck-through "regular" price, e.g. "$2,900"
-  lead?: string;           // lead-in copy, e.g. "want this exact site?"
-  windowHours?: number;    // countdown window per visitor (default 72h)
-};
-
+// Bottom-of-page studio line: one quiet "Want a site like this? → luziq.ai"
+// link that slides up near the page bottom. No prices, no timers — Luziq quotes
+// websites per project. Set `ctaBar: false` to turn it off for a demo.
 export type TourguideConfig = {
   siteSlug: string;        // tags the lead: luziq.ai/websites/ (Luziq)
   steps: TourStep[];
   adminUrl?: string;       // where the "check out the admin" nudge points
   inquireUrl?: string;     // override for the "get this built" CTA target
-  priceReveal?: PriceReveal | false; // bottom-of-page discount reveal
+  ctaBar?: boolean;        // bottom-of-page studio line (default on)
   accent?: string;         // shorthand for theme.accent
   theme?: TourguideTheme;
 };
@@ -178,7 +171,6 @@ function buildCSS(t: { accent: string; onAccent: string; font: string }): string
   // The reveal bar is dark, so its accent must stay bright regardless of how
   // dark the host brand color is (the tour cards are white and use t.accent).
   const rev = ensureBright(t.accent);
-  const onRev = contrastText(rev);
   return `
 .wp-tg-banner{position:fixed;top:0;left:0;right:0;z-index:99990;background:#141414f2;color:#fff;font-family:${t.font};font-size:13px;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:18px;padding:9px 14px;border-bottom:2px solid ${t.accent};backdrop-filter:saturate(1.2) blur(2px)}
 .wp-tg-banner a.wp-tg-credit{white-space:nowrap;color:#fff;border-bottom-color:#ffffff66}@media (max-width:600px){.wp-tg-banner .wp-tg-nightly{display:none}}
@@ -202,25 +194,15 @@ function buildCSS(t: { accent: string; onAccent: string; font: string }): string
 .wp-tg-exit-card h3{margin:0 0 12px;font-size:23px;font-weight:700;letter-spacing:-.01em;color:#1a1a1a}
 .wp-tg-exit-card p{margin:0 0 20px;font-size:14px;line-height:1.6;color:#444}
 body.wp-tg-active{padding-top:40px}
-body.wp-tg-price-open{padding-bottom:82px}
-.wp-tg-price{position:fixed;left:0;right:0;bottom:0;z-index:99992;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,0,0,1);background:rgba(18,18,18,.97);backdrop-filter:saturate(1.2) blur(4px);border-top:2px solid ${rev};color:#fff;font-family:${t.font};box-shadow:0 -14px 42px -14px rgba(0,0,0,.55)}
+body.wp-tg-price-open{padding-bottom:48px}
+.wp-tg-price{position:fixed;left:0;right:0;bottom:0;z-index:99992;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,0,0,1);background:rgba(18,18,18,.94);backdrop-filter:saturate(1.2) blur(4px);border-top:1px solid ${rev};color:#fff;font-family:${t.font}}
 .wp-tg-price.show{transform:translateY(0)}
-.wp-tg-price-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;padding:13px 18px}
-.wp-tg-price-lead{font-size:14px;color:#ffffffcc;font-weight:600}
-.wp-tg-price-copy{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;justify-content:center}
-.wp-tg-anchor{position:relative;font-size:15px;color:#ffffff66;font-weight:600}
-.wp-tg-anchor::after{content:'';position:absolute;left:-2px;right:-2px;top:52%;height:2px;background:${rev};transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,0,0,1) .15s}
-.wp-tg-price.reveal .wp-tg-anchor::after{transform:scaleX(1)}
-.wp-tg-now{font-size:22px;font-weight:800;letter-spacing:-.01em;color:#fff;opacity:0;transform:translateY(9px) scale(.96);transition:opacity .45s ease .38s,transform .45s cubic-bezier(.2,0,0,1) .38s}
-.wp-tg-price.reveal .wp-tg-now{opacity:1;transform:none}
-.wp-tg-now b{color:${rev}}
-.wp-tg-count{font-size:12px;color:#ffffff9c;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.wp-tg-count b{color:#fff;font-weight:700}
-.wp-tg-price .wp-tg-cta{all:unset;cursor:pointer;background:${rev};color:${onRev};padding:10px 20px;border-radius:999px;font-size:14px;font-weight:700;font-family:${t.font};white-space:nowrap}
-.wp-tg-price .wp-tg-cta:hover{filter:brightness(.93)}
-.wp-tg-price-x{all:unset;cursor:pointer;color:#ffffff70;font-size:19px;line-height:1;padding:4px 9px;border-radius:8px}
+.wp-tg-price-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:10px;justify-content:center;padding:10px 14px}
+.wp-tg-price a.wp-tg-cta{color:#ffffffd9;text-decoration:none;font-size:13px;letter-spacing:.01em}
+.wp-tg-price a.wp-tg-cta b{color:${rev};font-weight:600}
+.wp-tg-price a.wp-tg-cta:hover{color:#fff}
+.wp-tg-price-x{all:unset;cursor:pointer;color:#ffffff70;font-size:17px;line-height:1;padding:2px 8px;border-radius:8px}
 .wp-tg-price-x:hover{color:#fff;background:#ffffff1a}
-@media (max-width:600px){.wp-tg-now{font-size:19px}.wp-tg-price-lead{display:none}.wp-tg-price-in{gap:12px;padding:11px 14px}}
 `;
 }
 
@@ -373,96 +355,60 @@ export function mountTourguide(cfg: TourguideConfig): void {
     });
   });
 
-  // ── bottom-of-page price reveal (discount + founder-rate countdown) ─────────
-  if (cfg.priceReveal !== false) {
-    const pr = cfg.priceReveal || {};
-    const anchor = pr.anchor || "$2,900";
-    const nowPrice = pr.from || "from $1,500";
-    const lead = pr.lead || "want this exact site?";
-    const windowH = pr.windowHours || 72;
+  // ── bottom-of-page studio line (no prices, no countdown) ──────────────────
+  // Clear state left behind by the old priced bar so returning visitors see the
+  // new line even if they dismissed the old one.
+  localStorage.removeItem("wp_tg_deadline");
+  localStorage.removeItem("wp_tg_price_dismissed");
+  if (cfg.ctaBar !== false && !localStorage.getItem("wp_tg_cta_dismissed")) {
+    const bar = document.createElement("div");
+    bar.className = "wp-tg-price";
+    bar.innerHTML =
+      `<div class="wp-tg-price-in">` +
+      `<a class="wp-tg-cta" href="https://luziq.ai/websites/" target="_blank" rel="nofollow noopener">Want a site like this? → <b>luziq.ai</b></a>` +
+      `<button class="wp-tg-price-x" data-tg-price-x aria-label="dismiss">×</button>` +
+      `</div>`;
+    document.body.appendChild(bar);
 
-    if (!localStorage.getItem("wp_tg_price_dismissed")) {
-      // Persist the deadline per visitor so the countdown doesn't reset on refresh.
-      let deadline = parseInt(localStorage.getItem("wp_tg_deadline") || "0", 10);
-      if (!deadline || deadline < Date.now()) {
-        deadline = Date.now() + windowH * 3600 * 1000;
-        localStorage.setItem("wp_tg_deadline", String(deadline));
-      }
+    bar.querySelector("[data-tg-price-x]")!.addEventListener("click", () => {
+      localStorage.setItem("wp_tg_cta_dismissed", "1");
+      bar.classList.remove("show");
+      document.body.classList.remove("wp-tg-price-open");
+      setTimeout(() => bar.remove(), 550);
+    });
 
-      const bar = document.createElement("div");
-      bar.className = "wp-tg-price";
-      bar.innerHTML =
-        `<div class="wp-tg-price-in">` +
-        `<span class="wp-tg-price-lead">${lead}</span>` +
-        `<span class="wp-tg-price-copy"><span class="wp-tg-anchor">${anchor}</span>` +
-        `<span class="wp-tg-now"><b>${nowPrice}</b></span></span>` +
-        `<span class="wp-tg-count" data-tg-count></span>` +
-        `<a class="wp-tg-cta" href="${inquireUrl}" target="_blank" rel="nofollow noopener">get this built →</a>` +
-        `<button class="wp-tg-price-x" data-tg-price-x aria-label="dismiss">×</button>` +
-        `</div>`;
-      document.body.appendChild(bar);
+    let shown = false;
+    const reveal = () => {
+      if (shown) return;
+      shown = true;
+      bar.classList.add("show");
+      document.body.classList.add("wp-tg-price-open");
+    };
 
-      const countEl = bar.querySelector("[data-tg-count]") as HTMLElement;
-      let timer: ReturnType<typeof setInterval> | null = null;
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const tick = () => {
-        const ms = deadline - Date.now();
-        if (ms <= 0) {
-          countEl.innerHTML = `founder rate — <b>final slots</b>`;
-          if (timer) { clearInterval(timer); timer = null; }
-          return;
-        }
-        const h = Math.floor(ms / 3600000);
-        const m = Math.floor((ms % 3600000) / 60000);
-        const s = Math.floor((ms % 60000) / 1000);
-        countEl.innerHTML = `founder rate ends in <b>${pad(h)}:${pad(m)}:${pad(s)}</b>`;
-      };
-
-      bar.querySelector("[data-tg-price-x]")!.addEventListener("click", () => {
-        localStorage.setItem("wp_tg_price_dismissed", "1");
-        bar.classList.remove("show");
-        document.body.classList.remove("wp-tg-price-open");
-        if (timer) clearInterval(timer);
-        setTimeout(() => bar.remove(), 550);
-      });
-
-      let shown = false;
-      const reveal = () => {
-        if (shown) return;
-        shown = true;
-        bar.classList.add("show");
-        document.body.classList.add("wp-tg-price-open");
-        tick();
-        timer = setInterval(tick, 1000);
-        // strike-through + price pop after the bar finishes sliding up
-        setTimeout(() => bar.classList.add("reveal"), 480);
-      };
-
-      // Reveal when the visitor nears the bottom of the page.
-      const sentinel = document.createElement("div");
-      sentinel.style.cssText =
-        "position:absolute;bottom:0;left:0;width:1px;height:1px;pointer-events:none";
-      document.body.appendChild(sentinel);
-      if (typeof IntersectionObserver !== "undefined") {
-        const io = new IntersectionObserver(
-          (entries) => {
-            if (entries.some((e) => e.isIntersecting)) {
-              reveal();
-              io.disconnect();
-            }
-          },
-          { rootMargin: "0px 0px 45% 0px" }
-        );
-        io.observe(sentinel);
-      } else {
-        const onScroll = () => {
-          if ((window.scrollY + window.innerHeight) / document.body.scrollHeight > 0.66) {
+    // Reveal when the visitor nears the bottom of the page.
+    const sentinel = document.createElement("div");
+    sentinel.style.cssText =
+      "position:absolute;bottom:0;left:0;width:1px;height:1px;pointer-events:none";
+    document.body.appendChild(sentinel);
+    if (typeof IntersectionObserver !== "undefined") {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
             reveal();
-            window.removeEventListener("scroll", onScroll);
+            io.disconnect();
           }
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-      }
+        },
+        { rootMargin: "0px 0px 45% 0px" }
+      );
+      io.observe(sentinel);
+    } else {
+      const onScroll = () => {
+        if ((window.scrollY + window.innerHeight) / document.body.scrollHeight > 0.66) {
+          reveal();
+          window.removeEventListener("scroll", onScroll);
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
     }
   }
 }
