@@ -40,7 +40,7 @@ export type PriceReveal = {
 };
 
 export type TourguideConfig = {
-  siteSlug: string;        // tags the lead: xwhystudio.com/?demo=<siteSlug>#contact
+  siteSlug: string;        // tags the lead: luziq.ai/websites/ (Luziq)
   steps: TourStep[];
   adminUrl?: string;       // where the "check out the admin" nudge points
   inquireUrl?: string;     // override for the "get this built" CTA target
@@ -234,19 +234,19 @@ export function mountTourguide(cfg: TourguideConfig): void {
   document.head.appendChild(style);
 
   // "get this built" points at the studio that hosts the demo catalog
-  // (xwhystudio), NOT walkperro — and tags which demo drove the lead so the
+  // (Luziq, luziq.ai), NOT walkperro — and tags which demo drove the lead so the
   // contact form can prefill + Walk knows the source.
   const inquireUrl =
     cfg.inquireUrl ||
-    `https://www.xwhystudio.com/?demo=${encodeURIComponent(cfg.siteSlug)}#contact`;
+    `https://luziq.ai/websites/`;
 
   // ── banner ────────────────────────────────────────────────────────────────
   const banner = document.createElement("div");
   banner.className = "wp-tg-banner";
   banner.innerHTML =
-    `<span><span class="wp-tg-dot"></span>demo — resets nightly. explore anything.</span>` +
+    `<span><span class="wp-tg-dot"></span><a class="wp-tg-credit" href="https://luziq.ai/websites/" target="_blank" rel="nofollow noopener">Demo by <b style="letter-spacing:.12em">LUZIQ</b></a> · resets nightly</span>` +
     (cfg.adminUrl ? `<a href="${cfg.adminUrl}">open the admin →</a>` : "") +
-    `<a href="${inquireUrl}">want one like this? →</a>` +
+    `<a href="${inquireUrl}" target="_blank" rel="nofollow noopener">want one like this? →</a>` +
     `<button type="button" data-tg-restart>tour</button>`;
   document.body.appendChild(banner);
   document.body.classList.add("wp-tg-active");
@@ -363,7 +363,7 @@ export function mountTourguide(cfg: TourguideConfig): void {
       `<div class="wp-tg-exit-card"><h3>Want a site like this?</h3>` +
       `<p>Everything you just clicked — the site, the admin, the whole thing — can be built and branded for your business.</p>` +
       `<div class="wp-tg-row"><button class="wp-tg-skip" data-tg-close>keep looking</button>` +
-      `<a class="wp-tg-btn" style="text-decoration:none" href="${inquireUrl}">Get this built →</a></div></div>`;
+      `<a class="wp-tg-btn" style="text-decoration:none" href="${inquireUrl}" target="_blank" rel="nofollow noopener">Get this built →</a></div></div>`;
     document.body.appendChild(wrap);
     wrap.addEventListener("click", (ev) => {
       if (ev.target === wrap || (ev.target as HTMLElement).dataset.tgClose !== undefined) {
@@ -396,7 +396,7 @@ export function mountTourguide(cfg: TourguideConfig): void {
         `<span class="wp-tg-price-copy"><span class="wp-tg-anchor">${anchor}</span>` +
         `<span class="wp-tg-now"><b>${nowPrice}</b></span></span>` +
         `<span class="wp-tg-count" data-tg-count></span>` +
-        `<a class="wp-tg-cta" href="${inquireUrl}">get this built →</a>` +
+        `<a class="wp-tg-cta" href="${inquireUrl}" target="_blank" rel="nofollow noopener">get this built →</a>` +
         `<button class="wp-tg-price-x" data-tg-price-x aria-label="dismiss">×</button>` +
         `</div>`;
       document.body.appendChild(bar);

@@ -5,5 +5,16 @@
       "path": "/api/demo/reset",
       "schedule": "0 8 * * *"
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }
