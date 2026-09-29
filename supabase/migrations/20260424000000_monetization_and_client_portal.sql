@@ -495,7 +495,7 @@ values
   ('Training', 'I have a glute-specific goal — what''s the right starting point?', 'Start with the Glute Sculpt Guide or the Signature tier. Both are built around Summer''s heavy-lifting foundation. If you''d like form review and weekly adjustments, step up to Inner Circle.', 30),
   ('Training', 'Do I need a gym with full equipment?', 'A commercial gym or equivalent home setup (barbell, plates, bench, cable tower) gets you every class and program. A minimal-equipment track is available in the library for travel weeks.', 40),
   ('Nutrition', 'Are the meal plans allergy- or restriction-friendly?', 'The 7-Day Reset is written around flexible ingredients so most common swaps are easy (dairy-free, gluten-free, pescatarian). Clients with serious restrictions should start with Inner Circle for tailored macros.', 50),
-  ('Billing', 'Can I cancel a subscription anytime?', 'Yes. Subscriptions cancel at the end of the current billing period — you keep full access until then. Manage it from your client dashboard or email hello@summerloffler.com.', 60),
+  ('Billing', 'Can I cancel a subscription anytime?', 'Yes. Subscriptions cancel at the end of the current billing period — you keep full access until then. Manage it from your client dashboard or email hello@summerloffler-demo.com.', 60),
   ('Billing', 'Do you offer refunds on digital guides?', 'Because guides are delivered instantly, we don''t offer refunds on one-time purchases. If something isn''t right, email us within 7 days and we''ll make it right.', 70),
   ('Brand', 'Is Summer available for editorial or brand campaigns?', 'Yes — selectively. Use the inquiry form and mark "Brand / Campaign Booking" so it routes correctly. Response within one business day.', 80)
 on conflict do nothing;

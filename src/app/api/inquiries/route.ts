@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Notify the studio of the new inquiry. Stubbed/suppressed in demo mode and
     // a no-op until an email provider is configured — never blocks the response.
     await sendSummerEmail({
-      to: process.env.SUMMER_STUDIO_EMAIL || "hello@summerloffler.com",
+      to: process.env.SUMMER_STUDIO_EMAIL || "hello@summerloffler-demo.com",
       replyTo: email,
       subject: `New ${inquiryType} inquiry from ${fullName || email}`,
       text: `${fullName || "Someone"} (${email}) submitted a ${inquiryType} inquiry:\n\n${message}`,

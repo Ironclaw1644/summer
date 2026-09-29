@@ -40,7 +40,7 @@ export default function TermsPage() {
           <p>
             Subscriptions renew automatically each billing period until canceled. You can cancel
             anytime from your client dashboard or by emailing{" "}
-            <a href="mailto:hello@summerloffler.com">hello@summerloffler.com</a>. Access remains
+            <a href="mailto:hello@summerloffler-demo.com">hello@summerloffler-demo.com</a>. Access remains
             active until the end of the current billing period.
           </p>
           <h2>Digital products</h2>
@@ -62,7 +62,7 @@ export default function TermsPage() {
           </p>
           <h2>Contact</h2>
           <p>
-            Questions: <a href="mailto:hello@summerloffler.com">hello@summerloffler.com</a>.
+            Questions: <a href="mailto:hello@summerloffler-demo.com">hello@summerloffler-demo.com</a>.
           </p>
         </div>
       </Container>

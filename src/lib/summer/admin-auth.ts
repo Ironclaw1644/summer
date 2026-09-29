@@ -17,7 +17,7 @@ import type { SummerAdminUser } from "@/lib/summer/types";
 
 // In demo mode there are no real credentials — every admin request resolves to a
 // single synthetic admin identity so visitors can explore the full back office.
-const DEMO_ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL || "demo@summerloffler.com";
+const DEMO_ADMIN_EMAIL = process.env.DEMO_ADMIN_EMAIL || "demo@summerloffler-demo.com";
 
 function demoAdminSession(): SummerAdminSession {
   const adminUser: SummerAdminUser = {

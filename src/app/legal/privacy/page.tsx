@@ -51,7 +51,7 @@ export default function PrivacyPage() {
           </ul>
           <h2>Your rights</h2>
           <p>
-            Write to <a href="mailto:hello@summerloffler.com">hello@summerloffler.com</a> to
+            Write to <a href="mailto:hello@summerloffler-demo.com">hello@summerloffler-demo.com</a> to
             access, correct, or delete your data. We&rsquo;ll respond within 30 days.
           </p>
         </div>

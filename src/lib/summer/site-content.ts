@@ -8,8 +8,10 @@ import {
   offers as defaultOffers,
   trainingCards,
 } from "@/components/summer/site-data";
+import { DEMO_CONTACT_EMAIL, DEMO_INSTAGRAM_URL } from "@/lib/summer/demo-contact";
 import {
   hasSummerSupabaseAdminConfig,
+  IS_DEMO,
   selectSummerRows,
   selectSummerSingle,
 } from "@/lib/summer/supabase";
@@ -349,7 +351,7 @@ const DEFAULT_FAQ: SummerFaqItem[] = [
     topic: "Billing",
     question: "Can I cancel a subscription anytime?",
     answer:
-      "Yes. Subscriptions cancel at the end of the current billing period — you keep full access until then. Manage it from your client dashboard or email hello@summerloffler.com.",
+      "Yes. Subscriptions cancel at the end of the current billing period — you keep full access until then. Manage it from your client dashboard or email hello@summerloffler-demo.com.",
     sort_order: 40,
     is_visible: true,
     created_at: new Date().toISOString(),
@@ -836,8 +838,12 @@ export async function getSummerPublicSnapshot() {
       secondaryCtaHref: settings?.secondary_cta_href || defaults.secondaryCtaHref,
       trainingCtaText: settings?.training_cta_text || defaults.trainingCtaText,
       bookingCtaText: settings?.booking_cta_text || defaults.bookingCtaText,
-      contactEmail: settings?.contact_email || defaults.contactEmail,
-      instagramUrl: settings?.instagram_url || defaults.instagramUrl,
+      // Demo mode: the demo schema is seeded by copying rows out of the live
+      // `summer` schema, so site_settings still carries the real studio email
+      // and the real Instagram profile. Never let those reach the public
+      // portfolio demo — pin them to placeholders regardless of what the row says.
+      contactEmail: IS_DEMO ? DEMO_CONTACT_EMAIL : settings?.contact_email || defaults.contactEmail,
+      instagramUrl: IS_DEMO ? DEMO_INSTAGRAM_URL : settings?.instagram_url || defaults.instagramUrl,
       heroSlides: mapHeroSlides(heroItems, mediaAssets),
       about: {
         section: normalizeSection(sectionMap.get("about") || null, defaults.about.section),

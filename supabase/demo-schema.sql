@@ -435,7 +435,7 @@ alter default privileges in schema demo_summer grant all on sequences to anon, a
 
 -- ── Seed: synthetic demo admin (matches src/lib/summer/admin-auth.ts) ────────
 insert into demo_summer.admin_users (id, email, role)
-values ('00000000-0000-0000-0000-000000000000', 'demo@summerloffler.com', 'admin')
+values ('00000000-0000-0000-0000-000000000000', 'demo@summerloffler-demo.com', 'admin')
 on conflict (email) do nothing;
 
 -- ── Seed: clone editable CONTENT from production `summer` (if present) ────────
@@ -459,4 +459,27 @@ begin
     insert into demo_summer.admin_tips         select * from summer.admin_tips         on conflict do nothing;
     insert into demo_summer.faq                select * from summer.faq                on conflict do nothing;
   end if;
+end $$;
+
+-- ── Scrub: the copied CONTENT above is real site copy, and some of it (FAQ
+-- answers, section body text) contains the studio's real contact email. The
+-- demo is public, so rewrite it to the demo address everywhere. Runs after the
+-- clone so it catches whatever the copy brought in, and is safe to re-run.
+-- (Code also pins the header/footer address — see src/lib/summer/demo-contact.ts;
+--  this covers free text inside content the code never rewrites.)
+do $$
+declare r record;
+begin
+  for r in
+    select table_name, column_name
+    from information_schema.columns
+    where table_schema = 'demo_summer'
+      and data_type in ('text','character varying')
+  loop
+    execute format(
+      'update demo_summer.%I set %I = replace(%I, %L, %L) where %I like %L',
+      r.table_name, r.column_name, r.column_name,
+      'hello@summerloffler.com', 'hello@summerloffler-demo.com',
+      r.column_name, '%hello@summerloffler.com%');
+  end loop;
 end $$;

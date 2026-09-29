@@ -2,7 +2,8 @@ import "server-only";
 
 import { unstable_noStore as noStore } from "next/cache";
 
-import { selectSummerRows, selectSummerSingle } from "@/lib/summer/supabase";
+import { IS_DEMO, selectSummerRows, selectSummerSingle } from "@/lib/summer/supabase";
+import { DEMO_CONTACT_EMAIL, DEMO_INSTAGRAM_URL } from "@/lib/summer/demo-contact";
 import type {
   SummerGalleryItem,
   SummerHeroItem,
@@ -57,7 +58,13 @@ export async function getSummerAdminCollections() {
   ]);
 
   return {
-    siteSettings,
+    // Demo mode: the demo schema seeds site_settings by copying the live
+    // `summer` row, so it still holds the real studio email and Instagram URL.
+    // The demo back office is publicly browsable, so mask them here too.
+    siteSettings:
+      IS_DEMO && siteSettings
+        ? { ...siteSettings, contact_email: DEMO_CONTACT_EMAIL, instagram_url: DEMO_INSTAGRAM_URL }
+        : siteSettings,
     sections,
     offers,
     mediaAssets,
